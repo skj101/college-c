@@ -1,87 +1,56 @@
 #include <stdio.h>
+#include <string.h>
 
-// Function for linear search
-int linearSearch(int arr[], int size, int target) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == target) {
-            return i;
-        }
-    }
-    return -1; // Return -1 if target is not found
-}
+#define MAX_LENGTH 100
 
-// Function for binary search
-int binarySearch(int arr[], int size, int target) {
-    int left = 0, right = size - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (arr[mid] == target) {
-            return mid;
-        }
-        if (arr[mid] < target) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
-    }
-    return -1; // Return -1 if target is not found
+void getString(char str[MAX_LENGTH]) {
+    printf("Enter a string (max %d characters): ", MAX_LENGTH);
+    scanf(" %[^\n]s", str);
 }
 
 int main() {
-    int arr[100];
-    int size, target, choice, result;
+    char str1[MAX_LENGTH], str2[MAX_LENGTH], subStr[MAX_LENGTH];
+    int choice, start, length;
 
-    // Input for array size
-    printf("Enter the size of the array (max 100): ");
-    scanf("%d", &size);
-
-    // Input for array elements
-    printf("Enter the elements of the array:\n");
-    for (int i = 0; i < size; i++) {
-        scanf("%d", &arr[i]);
-    }
+    getString(str1);
+    getString(str2);
 
     while (1) {
-        printf("\nSelect an option:\n 1. Linear Search\n 2. Binary Search\n 3. Exit\n");
+        printf("\nSelect an operation:\n 1. Search for substring\n 2. Concatenate strings\n 3. Get substring\n  4. Exit\n");
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:
-                // Linear Search
-                printf("Enter the value to search for: ");
-                scanf("%d", &target);
-                result = linearSearch(arr, size, target);
-                if (result != -1) {
-                    printf("Linear search: Element %d found at index %d.\n", target, result);
+            case 1: // Search for substring
+                printf("Enter the substring to search for: ");
+                scanf(" %[^\n]s", subStr);
+                if (strstr(str1, subStr)) {
+                    printf("'%s' is a substring of '%s'.\n", subStr, str1);
                 } else {
-                    printf("Linear search: Element %d not found.\n", target);
+                    printf("'%s' is not a substring of '%s'.\n", subStr, str1);
                 }
                 break;
 
-            case 2:
-                // Binary Search
-                // Sort the array first
-                for (int i = 0; i < size-1; i++) {
-                    for (int j = 0; j < size-i-1; j++) {
-                        if (arr[j] > arr[j+1]) {
-                            int temp = arr[j];
-                            arr[j] = arr[j+1];
-                            arr[j+1] = temp;
-                        }
-                    }
-                }
+            case 2: // Concatenate strings
+                strcat(str1, str2);
+                printf("Concatenated string: %s\n", str1);
+                break;
 
-                printf("Enter the value to search for: ");
-                scanf("%d", &target);
-                result = binarySearch(arr, size, target);
-                if (result != -1) {
-                    printf("Binary search: Element %d found at index %d.\n", target, result);
+            case 3: // Get substring
+                printf("Enter the start position: ");
+                scanf("%d", &start);
+                printf("Enter the length: ");
+                scanf("%d", &length);
+                if (start >= 0 && start < strlen(str1) && length > 0 && (start + length) <= strlen(str1)) {
+                    char subStr[MAX_LENGTH];
+                    strncpy(subStr, str1 + start, length);
+                    subStr[length] = '\0';
+                    printf("Substring: %s\n", subStr);
                 } else {
-                    printf("Binary search: Element %d not found.\n", target);
+                    printf("Invalid start position or length for substring operation.\n");
                 }
                 break;
 
-            case 3:
+            case 4:
                 return 0; // Exit the program
 
             default:
