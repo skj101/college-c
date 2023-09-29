@@ -1,58 +1,63 @@
 #include <stdio.h>
-#include <string.h>
 
-#define MAX_LENGTH 100
-
-void getString(char str[MAX_LENGTH]) {
-    printf("Enter a string (max %d characters): ", MAX_LENGTH);
-    scanf(" %[^\n]s", str);
+void search(int arr[], int size, int key, int isBinary) {
+    if (isBinary) {
+        int left = 0, right = size - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == key) {
+                printf("Element found at index %d.\n", mid);
+                return;
+            }
+            if (arr[mid] < key) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    } else {
+        for (int i = 0; i < size; i++) {
+            if (arr[i] == key) {
+                printf("Element found at index %d.\n", i);
+                return;
+            }
+        }
+    }
+    printf("Element not found.\n");
 }
 
 int main() {
-    char str1[MAX_LENGTH], str2[MAX_LENGTH], subStr[MAX_LENGTH];
-    int choice, start, length;
+    int size, choice;
 
-    getString(str1);
-    getString(str2);
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
 
+    if (size <= 0) {
+        printf("Invalid array size.\n");
+        return 1;
+    }
+
+    int arr[size];
+    printf("Enter %d elements:\n", size);
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int key;
     while (1) {
-        printf("\nSelect an operation:\n 1. Search for substring\n 2. Concatenate strings\n 3. Get substring\n  4. Exit\n");
+        printf("1. Linear Search\n2. Binary Search\n3. Exit\nEnter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1: // Search for substring
-                printf("Enter the substring to search for: ");
-                scanf(" %[^\n]s", subStr);
-                if (strstr(str1, subStr)) {
-                    printf("'%s' is a substring of '%s'.\n", subStr, str1);
-                } else {
-                    printf("'%s' is not a substring of '%s'.\n", subStr, str1);
-                }
+            case 1:
+            case 2:
+                printf("Enter the element to search for: ");
+                scanf("%d", &key);
+                search(arr, size, key, choice == 2);
                 break;
-
-            case 2: // Concatenate strings
-                strcat(str1, str2);
-                printf("Concatenated string: %s\n", str1);
-                break;
-
-            case 3: // Get substring
-                printf("Enter the start position: ");
-                scanf("%d", &start);
-                printf("Enter the length: ");
-                scanf("%d", &length);
-                if (start >= 0 && start < strlen(str1) && length > 0 && (start + length) <= strlen(str1)) {
-                    char subStr[MAX_LENGTH];
-                    strncpy(subStr, str1 + start, length);
-                    subStr[length] = '\0';
-                    printf("Substring: %s\n", subStr);
-                } else {
-                    printf("Invalid start position or length for substring operation.\n");
-                }
-                break;
-
-            case 4:
-                return 0; // Exit the program
-
+            case 3:
+                printf("Exiting...\n");
+                return 0;
             default:
                 printf("Invalid choice. Please try again.\n");
                 break;
