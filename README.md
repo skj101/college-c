@@ -1,12 +1,6 @@
-![Issues](https://img.shields.io/github/issues/skj101/College-c ) 
-
 ## About The Project
 
 List of  C lab questions and its solutions
-
-## Built With
-
-Pure c code only
 
 ## Contributing
 
