@@ -1,137 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
-    int data;
-    struct Node* next;
-};
+#define MAX_SIZE 100
 
-struct Node* head = NULL;
+int array[MAX_SIZE];
+int size = 0; // Current size of the array
 
 void insertAtHead(int value) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = value;
-    newNode->next = head;
-    head = newNode;
+    if (size == MAX_SIZE) {
+        printf("Array is full. Cannot insert.\n");
+        return;
+    }
+    for (int i = size; i > 0; i--) {
+        array[i] = array[i - 1];
+    }
+    array[0] = value;
+    size++;
 }
 
 void insertAtTail(int value) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = value;
-    newNode->next = NULL;
-
-    if (head == NULL) {
-        head = newNode;
+    if (size == MAX_SIZE) {
+        printf("Array is full. Cannot insert.\n");
         return;
     }
-
-    struct Node* temp = head;
-    while (temp->next != NULL)
-        temp = temp->next;
-
-    temp->next = newNode;
+    array[size] = value;
+    size++;
 }
 
 void insertAtPosition(int value, int position) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = value;
-
-    if (position == 1) {
-        newNode->next = head;
-        head = newNode;
+    if (size == MAX_SIZE || position < 1 || position > size + 1) {
+        printf("Invalid position or array is full.\n");
         return;
     }
-
-    struct Node* temp = head;
-    for (int i = 1; i < position - 1 && temp != NULL; i++)
-        temp = temp->next;
-
-    if (temp == NULL) {
-        printf("Invalid position.\n");
-        return;
+    for (int i = size; i >= position; i--) {
+        array[i] = array[i - 1];
     }
-
-    newNode->next = temp->next;
-    temp->next = newNode;
+    array[position - 1] = value;
+    size++;
 }
 
 void deleteAtHead() {
-    if (head == NULL) {
-        printf("List is empty. Cannot delete.\n");
+    if (size == 0) {
+        printf("Array is empty. Cannot delete.\n");
         return;
     }
-
-    struct Node* temp = head;
-    head = head->next;
-    free(temp);
+    for (int i = 0; i < size - 1; i++) {
+        array[i] = array[i + 1];
+    }
+    size--;
 }
 
 void deleteAtTail() {
-    if (head == NULL) {
-        printf("List is empty. Cannot delete.\n");
+    if (size == 0) {
+        printf("Array is empty. Cannot delete.\n");
         return;
     }
-
-    if (head->next == NULL) {
-        free(head);
-        head = NULL;
-        return;
-    }
-
-    struct Node* temp = head;
-    while (temp->next->next != NULL)
-        temp = temp->next;
-
-    free(temp->next);
-    temp->next = NULL;
+    size--;
 }
 
 void deleteAtPosition(int position) {
-    if (head == NULL) {
-        printf("List is empty. Cannot delete.\n");
+    if (size == 0 || position < 1 || position > size) {
+        printf("Invalid position or array is empty.\n");
         return;
     }
-
-    if (position == 1) {
-        struct Node* temp = head;
-        head = head->next;
-        free(temp);
-        return;
+    for (int i = position - 1; i < size - 1; i++) {
+        array[i] = array[i + 1];
     }
-
-    struct Node* temp = head;
-    for (int i = 1; i < position - 1 && temp != NULL; i++)
-        temp = temp->next;
-
-    if (temp == NULL || temp->next == NULL) {
-        printf("Invalid position.\n");
-        return;
-    }
-
-    struct Node* toDelete = temp->next;
-    temp->next = temp->next->next;
-    free(toDelete);
+    size--;
 }
 
 void search(int value) {
-    struct Node* temp = head;
-    int position = 1;
-    while (temp != NULL) {
-        if (temp->data == value) {
-            printf("%d found at position %d.\n", value, position);
+    for (int i = 0; i < size; i++) {
+        if (array[i] == value) {
+            printf("%d found at position %d.\n", value, i + 1);
             return;
         }
-        temp = temp->next;
-        position++;
     }
-    printf("%d not found in the list.\n", value);
+    printf("%d not found in the array.\n", value);
 }
 
 void display() {
-    struct Node* temp = head;
-    while (temp != NULL) {
-        printf("%d ", temp->data);
-        temp = temp->next;
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);
     }
     printf("\n");
 }
@@ -140,7 +90,7 @@ int main() {
     int choice, value, position;
 
     do {
-        printf("\nSingly Linked List Operations:\n");
+        printf("\nArray Operations:\n");
         printf("1. Insert at Head\n");
         printf("2. Insert at Tail\n");
         printf("3. Insert at Position\n");
@@ -208,6 +158,5 @@ int main() {
                 break;
         }
     } while (choice != 9);
-
     return 0;
 }
