@@ -5,53 +5,11 @@
 int queue[MAX_SIZE];
 int front = -1, rear = -1;
 
-void enqueue(int value) {
-    if (rear == MAX_SIZE - 1) {
-        printf("Queue is full. Cannot enqueue.\n");
-        return;
-    }
-
-    if (front == -1)
-        front = 0;
-        
-    rear++;
-    queue[rear] = value;
-}
-
-void dequeue() {
-    if (front == -1) {
-        printf("Queue is empty. Cannot dequeue.\n");
-        return;
-    }
-
-    printf("Dequeued element: %d\n", queue[front]);
-
-    if (front == rear)
-        front = rear = -1;
-    else
-        front++;
-}
-
-void displayFrontRear() {
-    if (front == -1) {
-        printf("Queue is empty.\n");
-        return;
-    }
-
-    printf("Front element: %d\n", queue[front]);
-    printf("Rear element: %d\n", queue[rear]);
-}
-
 int main() {
     int choice, value;
 
     do {
-        printf("\nQueue Operations:\n");
-        printf("1. Enqueue\n");
-        printf("2. Dequeue\n");
-        printf("3. Display Front & Rear\n");
-        printf("4. Quit\n");
-
+        printf("\nQueue Operations:\n1. Enqueue\n2. Dequeue\n3. Display Front & Rear\n4. Quit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -59,15 +17,30 @@ int main() {
             case 1:
                 printf("Enter value to enqueue: ");
                 scanf("%d", &value);
-                enqueue(value);
+                if (rear == MAX_SIZE - 1) {
+                    printf("Queue is full. Cannot enqueue.\n");
+                } else {
+                    if (front == -1)
+                        front = 0;
+                    queue[++rear] = value;
+                }
                 break;
 
             case 2:
-                dequeue();
+                if (front == -1) {
+                    printf("Queue is empty. Cannot dequeue.\n");
+                } else {
+                    printf("Dequeued element: %d\n", queue[front]);
+                    (front == rear) ? (front = rear = -1) : (front++);
+                }
                 break;
 
             case 3:
-                displayFrontRear();
+                if (front == -1) {
+                    printf("Queue is empty.\n");
+                } else {
+                    printf("Front element: %d\nRear element: %d\n", queue[front], queue[rear]);
+                }
                 break;
 
             case 4:
